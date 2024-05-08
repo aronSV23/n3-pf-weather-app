@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
 import { useFormatData } from '../hooks/useFormatData';
-import { useSummarizeData } from '../hooks/useSummarizeData';
 
 // Este es el que tenemos que consumir
 export const WeatherContext = createContext()
@@ -11,7 +10,6 @@ const API_Key = '50504980bc6e8bb9f92626a501482ad4'
 export function WeatherProvider({ children }) {
   const [ geolocation, setGeolocation ] = useState()
   const { data, setFinalData } = useFormatData()
-  const { filteredData, formatDataArr } = useSummarizeData()
   const [ loader, setLoader ] = useState(true)
   const [ units, setUnits ] = useState('metric')
 
@@ -40,7 +38,7 @@ export function WeatherProvider({ children }) {
     const res2 = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${geolocation.lat}&lon=${geolocation.lon}&appid=${API_Key}&units=${units}`)
     const resJson2 = await res2.json()
 
-    formatDataArr(resJson, resJson2)
+    setFinalData(resJson, resJson2, units)
   };
   
   useEffect(() => {
@@ -59,12 +57,6 @@ export function WeatherProvider({ children }) {
       setLoader(false)
     }
   }, [data])
-
-  useEffect(() => {
-    if (filteredData) {
-      setFinalData(filteredData, units)
-    }
-  }, [filteredData, units])
   
   return (
     <WeatherContext.Provider value={{
