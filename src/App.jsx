@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <main className="min-h-screen w-screen font-Raleway">
+      <main className="min-h-screen w-screen tablet:flex tablet:flex-row font-Raleway">
         {loader ?
           <Loader /> :
           <>

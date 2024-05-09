@@ -9,7 +9,7 @@ const API_Key = '50504980bc6e8bb9f92626a501482ad4'
 // Este es el que nos provee de acceso al contexto
 export function WeatherProvider({ children }) {
   const [ geolocation, setGeolocation ] = useState()
-  const { data, setFinalData } = useFormatData()
+  const { data, setFinalData, setDataToCelsius, setDataToFahrenheit } = useFormatData()
   const [ loader, setLoader ] = useState(true)
   const [ units, setUnits ] = useState('metric')
 
@@ -17,28 +17,58 @@ export function WeatherProvider({ children }) {
     navigator.geolocation.getCurrentPosition(position => {
       const { latitude, longitude } = position.coords;
       setGeolocation({ lat: latitude.toFixed(2), lon: longitude.toFixed(2) })
-    }, error => console.warn(`ERROR(${error.code}): ${error.message}`));
+    }, error => {
+      console.warn(`ERROR(${error.code}): ${error.message}`);
+      alert('Hubo un error al obtener la ubicación. Por favor, asegúrate de tener activada la geolocalización en tu dispositivo.');
+    });
   };
 
   const getNearestLocationIp = async () => {
     try {
       const response = await fetch('https://ipapi.co/json/');
+      if (!response.ok) {
+        throw new Error('IP API request failed');
+      }
       const jsonResponse = await response.json();
       const { latitude, longitude } = jsonResponse;
       setGeolocation({ lat: latitude.toFixed(2), lon: longitude.toFixed(2) })
     } catch (error) {
       console.error('Error fetching location:', error);
+      alert('Hubo un error al obtener la ubicación más cercana. Por favor, inténtalo de nuevo más tarde.');
       return null;
     }
   }
 
   const getCurentLocationWeatherData = async () => {
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geolocation.lat}&lon=${geolocation.lon}&appid=${API_Key}&units=${units}`)
-    const resJson = await res.json()
-    const res2 = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${geolocation.lat}&lon=${geolocation.lon}&appid=${API_Key}&units=${units}`)
-    const resJson2 = await res2.json()
+    try {
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geolocation.lat}&lon=${geolocation.lon}&appid=${API_Key}&units=${units}`)
+      if (!res.ok) {
+        throw new Error(`${res.statusText}`);
+      }
+      const resJson = await res.json()
+      const res2 = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${geolocation.lat}&lon=${geolocation.lon}&appid=${API_Key}&units=${units}`)
+      if (!res.ok) {
+        throw new Error(`${res.statusText}`);
+      }
+      const resJson2 = await res2.json()
 
-    setFinalData(resJson, resJson2, units)
+      setFinalData(resJson, resJson2, units)
+    } catch (error) {
+      alert(`Hubo un error: ${error.message}`);
+    }
+  };
+
+  const getCurrentWeatherDataSearchByCity = async (location, units) => {
+    try {
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_Key}&units=${units}`);
+      if (!res.ok) {
+        throw new Error(`${res.statusText}`);
+      }
+      const resJson = await res.json();
+      setGeolocation({ lat: resJson.coord.lat.toFixed(2), lon: resJson.coord.lon.toFixed(2) })
+    } catch (error) {
+      alert(`Hubo un error: ${error.message}`);
+    }
   };
   
   useEffect(() => {
@@ -53,8 +83,9 @@ export function WeatherProvider({ children }) {
 
   useEffect(() => {
     if (data) {
-      console.log(data)
       setLoader(false)
+    } else {
+      setLoader(true)
     }
   }, [data])
   
@@ -63,7 +94,11 @@ export function WeatherProvider({ children }) {
       getGeoLocation,
       data,
       loader,
-      setUnits
+      setUnits,
+      units,
+      setDataToFahrenheit,
+      setDataToCelsius,
+      getCurrentWeatherDataSearchByCity
     }}
     >
       {children}

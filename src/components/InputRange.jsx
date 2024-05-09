@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const InputRange = () => {
+export const InputRange = ({ range }) => {
     return (
         <div className='flex flex-col pb-9 justify-center items-center'>
             <div className='w-[229px] relative'>
@@ -12,11 +12,11 @@ export const InputRange = () => {
                 type="range"
                 min='0'
                 max='100'
-                value='80'
+                value={range}
                 readOnly
                 className='range-slider w-[229px] h-2 bg-[#E7E7EB] rounded-full appearance-none'
                 style={{
-                    background: 'linear-gradient(to right, #FFEC65 0%, #FFEC65 80%, #E7E7EB 80%, #E7E7EB 100%)'
+                    background: `linear-gradient(to right, #FFEC65 0%, #FFEC65 ${range}%, #E7E7EB ${range}%, #E7E7EB 100%)`
                 }}
             />
             <div className='w-[229px] relative'>

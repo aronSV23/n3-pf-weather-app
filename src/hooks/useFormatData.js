@@ -67,7 +67,7 @@ export function useFormatData () {
 
       function formatVisibility(visivility, unit){
         let visibilityUnits = ''
-        let visivilityValue
+        let visibilityValue
 
         if (unit === 'metric') {
             visibilityUnits = 'Km'
@@ -76,12 +76,12 @@ export function useFormatData () {
           }
 
           if (unit === 'metric') {
-            visivilityValue = ((visivility)/1000).toFixed(1)
+            visibilityValue = ((visivility)/1000).toFixed(1)
           } else {
-            visivilityValue = ((visivility)/1609.344).toFixed(1)
+            visibilityValue = ((visivility)/1609.344).toFixed(1)
           }
 
-          return { visivilityValue, visibilityUnits }
+          return { visibilityValue, visibilityUnits }
       }
 
       function formatDataArr(resJson,resJson2) {
@@ -108,10 +108,12 @@ export function useFormatData () {
             name: 'today',
             date:  formatDate(arr[0].dt),
             locationName: arr[0].name + ', ' + arr[0].sys.country,
-            temperature: arr[0].main.temp,
+            temperature: (arr[0].main.temp).toFixed(0),
+            temperatureUnits: (unit === 'metric' ? '°C' : '°F'),
+            weatherName:  arr[0].weather[0].main,
             iconName: arr[0].weather[0].description,
             icon: formatIcon(arr[0].weather[0].icon),
-            windDirection: formatWind(arr[0].wind.deg, arr[0].wind.speed, unit),
+            windStatus: formatWind(arr[0].wind.deg, arr[0].wind.speed, unit),
             humidity: arr[0].main.humidity,
             visibility: formatVisibility((arr[0].visibility), unit),
             airPressure: arr[0].main.pressure
@@ -121,42 +123,82 @@ export function useFormatData () {
               date: 'Tomorrow',
               iconName: arr[1].weather[0].description,
               icon: formatIcon(arr[1].weather[0].icon),
-              minTemperature: arr[1].main.temp_min,
-              maxTemperature: arr[1].main.temp_max,
+              minTemperature: (arr[1].main.temp_min).toFixed(0),
+              maxTemperature: (arr[1].main.temp_max).toFixed(0),
+              temperatureUnits: (unit === 'metric' ? '°C' : '°F'),
             },
             {
               date: formatDate(arr[2].dt),
               iconName: arr[2].weather[0].description,
               icon: formatIcon(arr[2].weather[0].icon),
-              minTemperature: arr[2].main.temp_min,
-              maxTemperature: arr[2].main.temp_max,
+              minTemperature: (arr[2].main.temp_min).toFixed(0),
+              maxTemperature: (arr[2].main.temp_max).toFixed(0),
+              temperatureUnits: (unit === 'metric' ? '°C' : '°F'),
             },
             {
               date: formatDate(arr[3].dt),
               iconName: arr[3].weather[0].description,
               icon: formatIcon(arr[3].weather[0].icon),
-              minTemperature: arr[3].main.temp_min,
-              maxTemperature: arr[3].main.temp_max,
+              minTemperature: (arr[3].main.temp_min).toFixed(0),
+              maxTemperature: (arr[3].main.temp_max).toFixed(0),
+              temperatureUnits: (unit === 'metric' ? '°C' : '°F'),
             },
             {
               date: formatDate(arr[4].dt),
               iconName: arr[4].weather[0].description,
               icon: formatIcon(arr[4].weather[0].icon),
-              minTemperature: arr[4].main.temp_min,
-              maxTemperature: arr[4].main.temp_max,
+              minTemperature: (arr[4].main.temp_min).toFixed(0),
+              maxTemperature: (arr[4].main.temp_max).toFixed(0),
+              temperatureUnits: (unit === 'metric' ? '°C' : '°F'),
             },
             {
               date: formatDate(arr[5].dt),
               iconName: arr[5].weather[0].description,
               icon: formatIcon(arr[5].weather[0].icon),
-              minTemperature: arr[5].main.temp_min,
-              maxTemperature: arr[5].main.temp_max,
+              minTemperature: (arr[5].main.temp_min).toFixed(0),
+              maxTemperature: (arr[5].main.temp_max).toFixed(0),
+              temperatureUnits: (unit === 'metric' ? '°C' : '°F'),
             },
           ]
         })
     
       }
         
+      const setDataToCelsius = (data) =>{
+        const celsiusData = structuredClone(data)
 
-  return { data, setFinalData }
+        celsiusData.today.temperature = ((data.today.temperature - 32) * 5/9).toFixed(0)
+        celsiusData.today.temperatureUnits = '°C'
+        celsiusData.today.windStatus.windSpeed = (data.today.windStatus.windSpeed * 0.447).toFixed(1)
+        celsiusData.today.windStatus.windUnits = 'mps'
+        celsiusData.today.visibility.visibilityValue = (data.today.visibility.visibilityValue * 1.60934).toFixed(1)
+        celsiusData.today.visibility.visibilityUnits = 'km'
+        celsiusData.nextDays.forEach(day => {
+            day.maxTemperature = ((day.maxTemperature - 32) * 5/9).toFixed(0)
+            day.minTemperature = ((day.minTemperature - 32) * 5/9).toFixed(0)
+            day.temperatureUnits = '°C'
+        });
+
+        setData(celsiusData)
+      }
+
+      const setDataToFahrenheit = (data) =>{
+        const fahrenheitData = structuredClone(data)
+      
+        fahrenheitData.today.temperature = ((data.today.temperature * 9/5) + 32).toFixed(0)
+        fahrenheitData.today.temperatureUnits = '°F'
+        fahrenheitData.today.windStatus.windSpeed = (data.today.windStatus.windSpeed * 2.23694).toFixed(1)
+        fahrenheitData.today.windStatus.windUnits = 'mph'
+        fahrenheitData.today.visibility.visibilityValue = (data.today.visibility.visibilityValue * 0.621371).toFixed(1)
+        fahrenheitData.today.visibility.visibilityUnits = 'miles'
+        fahrenheitData.nextDays.forEach(day => {
+            day.maxTemperature = ((day.maxTemperature * 9/5) + 32).toFixed(0)
+            day.minTemperature = ((day.minTemperature * 9/5) + 32).toFixed(0)
+            day.temperatureUnits = '°F'
+        });
+      
+        setData(fahrenheitData)
+      }
+
+  return { data, setFinalData, setDataToCelsius, setDataToFahrenheit }
 }

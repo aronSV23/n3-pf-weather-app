@@ -14,7 +14,7 @@ export default {
         'Raleway': ['Raleway', 'sans-serif']
       },
       screens:{
-        'tablet': '960px'
+        'tablet': '1194px'
       },
       backgroundImage:{
         'cloudBackgound' : 'url(src/assets/Cloud-background.png)'
