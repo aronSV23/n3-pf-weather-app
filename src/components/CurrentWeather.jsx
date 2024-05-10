@@ -7,8 +7,8 @@ export const CurrentWeather = () => {
     const [isOpen, setIsOpen] = useState(false)
 
 
-    const ImageRender = () => { return <img src={`icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />}
-
+/*     const ImageRender = () => { return <img src={`icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />}
+ */
 
     return (
         <aside className="bg-[#1E213A] flex flex-col  justify-around grow tablet:shrink min-h-lvh min-w-[375px] tablet:max-w-[460px] font-Raleway relative">
@@ -25,9 +25,9 @@ export const CurrentWeather = () => {
                 <div className='w-full bg-cloudBackgound bg-no-repeat bg-cover opacity-5 bg-center h-[326px] tablet:h-[290px]'>
                 </div>
                 <div className='w-[180px] tablet:w-[170px] m-auto h-0'>
-                    <ImageRender />
-{/*                     <img src={`/public/icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />
- */}                
+{/*                     <ImageRender />
+ */}                   <img src={`icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />
+              
                 </div>
             </div>
             <div className='w-full text-center font-medium'>
