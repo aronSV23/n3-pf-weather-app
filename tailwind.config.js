@@ -18,7 +18,7 @@ export default {
         'tablet': '1194px'
       },
       backgroundImage:{
-        'cloudBackgound' : 'url(icons/Cloud-background.png)'
+        'cloudBackgound' : 'url(/icons/Cloud-background.png)'
       }
     },
   },
