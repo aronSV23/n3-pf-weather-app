@@ -9,7 +9,7 @@ const API_Key = '50504980bc6e8bb9f92626a501482ad4'
 // Este es el que nos provee de acceso al contexto
 export function WeatherProvider({ children }) {
   const [ geolocation, setGeolocation ] = useState()
-  const { data, setFinalData, setDataToCelsius, setDataToFahrenheit } = useFormatData()
+  const { data, setFinalData, setDataToCelsius, setDataToFahrenheit, setData } = useFormatData()
   const [ loader, setLoader ] = useState(true)
   const [ units, setUnits ] = useState('metric')
 
@@ -41,8 +41,10 @@ export function WeatherProvider({ children }) {
 
   const getCurentLocationWeatherData = async () => {
     try {
+      setLoader(true)
       const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geolocation.lat}&lon=${geolocation.lon}&appid=${API_Key}&units=${units}`)
       if (!res.ok) {
+        setLoader(false)
         throw new Error(`${res.statusText}`);
       }
       const resJson = await res.json()
@@ -58,10 +60,12 @@ export function WeatherProvider({ children }) {
     }
   };
 
-  const getCurrentWeatherDataSearchByCity = async (location, units) => {
+  const getCurrentWeatherDataSearchByCity = async (location) => {
     try {
-      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_Key}&units=${units}`);
+      setLoader(true)
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_Key}`);
       if (!res.ok) {
+        setLoader(false)
         throw new Error(`${res.statusText}`);
       }
       const resJson = await res.json();
@@ -98,7 +102,8 @@ export function WeatherProvider({ children }) {
       units,
       setDataToFahrenheit,
       setDataToCelsius,
-      getCurrentWeatherDataSearchByCity
+      getCurrentWeatherDataSearchByCity,
+      setGeolocation
     }}
     >
       {children}

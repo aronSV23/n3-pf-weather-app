@@ -200,5 +200,5 @@ export function useFormatData () {
         setData(fahrenheitData)
       }
 
-  return { data, setFinalData, setDataToCelsius, setDataToFahrenheit }
+  return { data, setFinalData, setDataToCelsius, setDataToFahrenheit, setData }
 }

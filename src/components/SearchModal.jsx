@@ -1,22 +1,27 @@
 import React, { useContext, useState } from 'react'
 import { WeatherContext } from '../context/weather'
+import { useCurrentWeatherSearchByCity } from '../hooks/useCurrentWeatherSearchByCity'
 import { LocationsItem } from './LocationsItem'
 
 export const SearchModal = ({ setIsOpen }) => {
     const [showLocations, setShowLocations] = useState(false)
-    const { units, getCurrentWeatherDataSearchByCity } = useContext(WeatherContext)
-
+    const { getCurrentWeatherDataSearchByCity } = useContext(WeatherContext)
+    const { searchLocationsData, getLocationsData, setSearchLocationsData } = useCurrentWeatherSearchByCity()
     const [searchLocation, setSearchLocation] = useState('')
 
-    const locations = ['London', 'Barcelona', 'Long Beach']
-
-    const selectLocation = (location) => {
-        setSearchLocation(location)
+    const handleSelectLocation = (location) => {
+        setSearchLocation(location.place)
         setShowLocations(false)
     }
 
     const searchLocations = (e) => {
         setSearchLocation(e.target.value)
+        if (e.target.value === '') {
+            setSearchLocationsData([])
+        }
+        if (e.target.value != '') {
+        getLocationsData(e.target.value)
+        }
     }
 
     const handleShowLocation = (e) => {
@@ -27,8 +32,8 @@ export const SearchModal = ({ setIsOpen }) => {
 
     const handleSearchWeatherByLocation = () => {
         if (searchLocation != '') {
-        getCurrentWeatherDataSearchByCity(searchLocation, units)
-        setIsOpen(false)
+            getCurrentWeatherDataSearchByCity(searchLocation)
+            setIsOpen(false)
         }
     }
 
@@ -54,11 +59,11 @@ export const SearchModal = ({ setIsOpen }) => {
                 </button>
             </div>
             
-            {locations &&
+            {searchLocationsData &&
                 <section id='location-list' className='flex mx-auto w-full text-[#E7E7EB] px-4 py-6'>
                     <ul className='flex py-4 w-full flex-col gap-4'>
                         { showLocations &&
-                            locations.map((location, index) => <LocationsItem selectLocation={selectLocation} key={index} location={location} />)
+                            searchLocationsData.map((location, index) => <LocationsItem handleSelectLocation={handleSelectLocation} key={index} location={location} />)
                         }
                     </ul>
                 </section>

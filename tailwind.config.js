@@ -11,7 +11,8 @@ export default {
         'DarkBlue': '#100E1D',
       },
       fontFamily: {
-        'Raleway': ['Raleway', 'sans-serif']
+        'Raleway': ['Raleway', 'sans-serif'],
+        'Montserrat': ['Montserrat', 'sans-serif']
       },
       screens:{
         'tablet': '1194px'
