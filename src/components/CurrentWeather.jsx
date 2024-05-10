@@ -7,16 +7,13 @@ export const CurrentWeather = () => {
     const [isOpen, setIsOpen] = useState(false)
 
 
-/*     const ImageRender = () => { return <img src={`icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />}
- */
-
     return (
         <aside className="bg-[#1E213A] flex flex-col  justify-around grow tablet:shrink min-h-lvh min-w-[375px] tablet:max-w-[460px] font-Raleway relative">
-            { isOpen &&
+            {isOpen &&
                 <SearchModal setIsOpen={setIsOpen} />
             }
             <div className='text-[#E7E7EB] flex justify-between px-[14px] py-[18px] tablet:p-6 tablet:mt-3 '>
-                <button onClick={()=>setIsOpen(true)} className='w-[161px] h-[40px] bg-[#6E707A] cursor-pointer hover:bg-[#55565d] shadow-[#00000040] active:text-[#110E3C] active:bg-[#E7E7EB]'>Seach for places</button>
+                <button onClick={() => setIsOpen(true)} className='w-[161px] h-[40px] bg-[#6E707A] cursor-pointer hover:bg-[#55565d] shadow-[#00000040] active:text-[#110E3C] active:bg-[#E7E7EB]'>Seach for places</button>
                 <button className='bg-[#6E707A] w-[40px] h-[40px] rounded-full cursor-pointer hover:bg-[#55565d] shadow-[#00000040] mr-2 active:text-[#110E3C] active:bg-[#E7E7EB]' onClick={getGeoLocation} >
                     <i className="fa-solid fa-location-crosshairs"></i>
                 </button>
@@ -25,9 +22,7 @@ export const CurrentWeather = () => {
                 <div className='w-full bg-cloudBackgound bg-no-repeat bg-cover opacity-5 bg-center h-[326px] tablet:h-[290px]'>
                 </div>
                 <div className='w-[180px] tablet:w-[170px] m-auto h-0'>
-{/*                     <ImageRender />
- */}                   <img src={`icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />
-              
+                    <img src={`icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />
                 </div>
             </div>
             <div className='w-full text-center font-medium'>
@@ -35,9 +30,9 @@ export const CurrentWeather = () => {
             </div>
             <h3 className='w-full text-center text-[#A09FB1] text-[36px] leading-[42.26px] font-medium tablet:text-[32px]'>{data.today.weatherName}</h3>
             <div className='w-full text-center text-[#A09FB1] text-[16px] leading-[21.13px] font-medium flex justify-center gap-4 pt-8'>
-            <p>Today </p>
-            • 
-            <p> {data.today.date}</p>
+                <p>Today </p>
+                •
+                <p> {data.today.date}</p>
             </div>
             <p className='w-full text-center text-[#A09FB1] text-[16px] leading-[21.13px] font-medium flex justify-center gap-4 py-9 content-center'>
                 <i className="fa-solid fa-location-dot"></i>
