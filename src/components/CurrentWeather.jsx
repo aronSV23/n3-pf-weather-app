@@ -7,7 +7,7 @@ export const CurrentWeather = () => {
     const [isOpen, setIsOpen] = useState(false)
 
 
-    const ImageRender = () => { return <img src={`/public/icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />}
+    const ImageRender = () => { return <img src={`icons/${data.today.icon}d.png`} alt={data.today.iconName} className='m-auto relative bottom-64 z-10' />}
 
 
     return (
