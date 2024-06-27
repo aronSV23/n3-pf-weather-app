@@ -14,7 +14,6 @@ export function useCurrentWeatherSearchByCity () {
     const getLocationsData = async (location) => {
         try {
           const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=4&appid=${API_Key}`);
-          console.log('respuesta' ,res)
           if (!res.ok) {
             throw new Error(`${res.statusText}`);
           }
@@ -26,7 +25,6 @@ export function useCurrentWeatherSearchByCity () {
 
           setSearchLocationsData(locationArray)
         } catch (error) {
-          console.log('error' ,error)
           alert(`Hubo un error: ${error.message}`);
         }
       };
